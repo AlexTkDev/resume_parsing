@@ -55,6 +55,25 @@ This script is used to load the HTML content of a web page using Selenium and sa
     print("HTML saved to 'page_content.html'")
 ```
 
+---
+
+### 4. Script for Parsing a Specific Resume from work.ua by User ID
+**Description:**
+This script extracts data from a specific resume on [work.ua](https://work.ua) based on the user ID. It uses the `requests` library to perform HTTP requests and `BeautifulSoup` to parse the HTML content of the page. The data is saved in a JSON file.
+
+**Key Functions:**
+
+- `clean_text(text)`: Cleans the text by removing unnecessary spaces and newline characters.
+- `get_separate_resume(url)`: Sends an HTTP request to the resume page, extracts and formats data such as title, name, and resume details.
+- `save_to_json(data, filename)`: Saves the extracted data to a JSON file.
+- `main(user_id)`: The main function that forms the URL based on the user ID, extracts the resume data, and saves it to a file named `resume_{user_id}.json`.
+
+**Example of running the script:**
+
+```bash
+  python work_ua/get_separate_resume.py --userID 10856921
+```
+
 ***
 
 ## Проект в процессе разработки
@@ -126,4 +145,23 @@ JSON файл.
     html_data = get_data_by_selenium(url)
     save_html_to_file(html_data, "page_content.html")
     print("HTML сохранен в 'page_content.html'")
+```
+
+---
+
+### 4. Скрипт для парсинга отдельного резюме с work.ua по ID пользователя
+**Описание:**
+Этот скрипт извлекает данные конкретного резюме с сайта [work.ua](https://work.ua) на основе ID пользователя. Используется библиотека `requests` для выполнения HTTP-запросов и `BeautifulSoup` для анализа HTML-кода страницы. Данные сохраняются в JSON файл.
+
+**Ключевые функции:**
+
+- `clean_text(text)`: Очищает текст от лишних пробелов и символов переноса строк.
+- `get_separate_resume(url)`: Выполняет HTTP-запрос к странице с резюме, извлекает и форматирует такие данные, как заголовок, имя и детали резюме.
+- `save_to_json(data, filename)`: Сохраняет извлеченные данные в JSON файл.
+- `main(user_id)`: Основная функция, которая формирует URL на основе ID пользователя, извлекает данные резюме и сохраняет их в файл `resume_{user_id}.json`.
+
+**Пример запуска:**
+
+```bash
+   python work_ua/get_separate_resume.py --userID 10856921
 ```
