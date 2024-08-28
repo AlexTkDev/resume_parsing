@@ -1,0 +1,13 @@
+[flake8]
+
+exclude =
+    migrations
+
+max-line-length = 99
+
+# Файлы для проверки
+filename =
+    work_ua/get_resume.py
+    work_ua/get_separate_resume.py
+    robota_ua/get_resume.py
+    other_tools/get_all_html.py
