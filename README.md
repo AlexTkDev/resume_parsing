@@ -1,4 +1,4 @@
-## Project in Progress
+## :hammer: Project in Progress :technologist:
 
 ### Installation
 1. **Clone the repository:**
@@ -94,7 +94,7 @@ This script extracts data from a specific resume on [work.ua](https://work.ua) b
 
 ***
 
-## Проект в процессе разработки
+## :hammer: Проект в процессе разработки :technologist:
 
 ### Установка
 1. **Клонируйте репозиторий:**
