@@ -41,28 +41,27 @@ def fetch_resumes(url, driver):
             title = 'No title'
 
         try:
-            link = resume.find_element(By.CSS_SELECTOR,
-                                       'a.santa-no-underline').get_attribute('href')
+            link = resume.find_element(
+                By.CSS_SELECTOR, 'a.santa-no-underline').get_attribute('href')
         except NoSuchElementException:
             link = 'No link'
 
         try:
-            name = resume.find_element(By.CSS_SELECTOR,
-                                       'p.santa-typo-regular.santa-truncate').text.strip()
+            name = resume.find_element(
+                By.CSS_SELECTOR, 'p.santa-typo-regular.santa-truncate').text.strip()
         except NoSuchElementException:
             name = 'No name'
 
         try:
-            details = resume.find_element(By.CSS_SELECTOR,
-                                          'div.santa-flex.santa-items-center.santa-space-x-10'
-                                          '.santa-pr-20.santa-whitespace-nowrap').text.strip()
+            details = resume.find_element(
+                By.CSS_SELECTOR, 'div.santa-flex.santa-items-center.santa-space-x-10'
+                                 '.santa-pr-20.santa-whitespace-nowrap').text.strip()
         except NoSuchElementException:
             details = 'No details'
 
         try:
-            posted_time = resume.find_element(By.CSS_SELECTOR,
-                                              'p.santa-typo-additional.santa-text-black-500'
-                                              ).text.strip()
+            posted_time = resume.find_element(
+                By.CSS_SELECTOR, 'p.santa-typo-additional.santa-text-black-500').text.strip()
         except NoSuchElementException:
             posted_time = 'No time'
 
