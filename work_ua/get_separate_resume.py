@@ -4,6 +4,17 @@ import json
 import argparse
 
 
+def get_user_links(file):
+    """Извлекает все значения ключа 'link' из JSON-файла."""
+    links = []
+    with open(file, 'r', encoding='utf-8') as json_file:
+        data = json.load(json_file)
+        for item in data:
+            if 'link' in item:
+                links.append(item['link'])
+    return links
+
+
 def clean_text(text):
     """Убирает лишние пробелы и символы переноса строк."""
     return ' '.join(text.split())
@@ -40,21 +51,23 @@ def save_to_json(data, filename):
         json.dump(data, json_file, ensure_ascii=False, indent=4)
 
 
-def main(user_id):
-    if user_id is None:
-        print("Please provide a valid user ID.")
+def main(file):
+    links = get_user_links(file)
+    if not links:
+        print("No links found in the file.")
         return
 
-    base_url = f"https://www.work.ua/resumes/{user_id}/"
-    print(f'Processing page: {base_url}')
-
-    resume = get_separate_resume(base_url)
-    save_to_json(resume, f'resume_{user_id}.json')
+    for link in links:
+        print(f'Processing page: {link}')
+        resume = get_separate_resume(link)
+        user_id = link.split('/')[-2]  # извлечение userID из URL
+        save_to_json(resume, f'resume_{user_id}.json')
 
 
 if __name__ == "__main__":
-    # python work_ua/get_separate_resume.py --userID 10856921
+    #  python work_ua/get_separate_resume.py --file resumes_work_ua.json
     parser = argparse.ArgumentParser(description="Скрипт для парсинга резюме.")
-    parser.add_argument('--userID', type=int, required=True, help='ID пользователя')
+    parser.add_argument('--file', type=str, required=True,
+                        help='JSON файл со ссылками на резюме')
     args = parser.parse_args()
-    main(args.userID)
+    main(args.file)
