@@ -1,5 +1,23 @@
 ## Project in Progress
 
+### Installation
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/AlexTkDev/resume_parsing_and_telegram_bot.git
+   cd resume_parsing_and_telegram_bot
+   ```
+
+2. **Create and activate a virtual environment:**
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # For Windows use `venv\Scripts\activate`
+   ```
+
+3. **Install dependencies:**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
 ### 1. Script for Parsing Resumes from robota.ua
 **Description:**
 This script parses resumes from the [robota.ua](https://robota.ua) website. Selenium is used to automate the Chrome browser, which runs in headless mode (without displaying the GUI). The script iterates through resume pages and saves the data into a JSON file.
@@ -77,6 +95,24 @@ This script extracts data from a specific resume on [work.ua](https://work.ua) b
 ***
 
 ## Проект в процессе разработки
+
+### Установка
+1. **Клонируйте репозиторий:**
+   ```bash
+   git clone https://github.com/AlexTkDev/resume_parsing_and_telegram_bot.git
+   cd resume_parsing_and_telegram_bot
+   ```
+
+2. **Создайте и активируйте виртуальное окружение:**
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # Для Windows используйте `venv\Scripts\activate`
+   ```
+
+3. **Установите зависимости:**
+   ```bash
+   pip install -r requirements.txt
+   ```
 
 ### 1. Скрипт для парсинга резюме с robota.ua
 **Описание:**
