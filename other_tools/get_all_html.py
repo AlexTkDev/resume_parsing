@@ -35,7 +35,7 @@ def save_html_to_file(html_content: str, file_path: str):
         file.write(html_content)
 
 
-url = "https://robota.ua/candidates/all/ukraine"
+url = "https://robota.ua/candidates/8041308"
 html_data = get_data_by_selenium(url)
-save_html_to_file(html_data, "page_content.html")
+save_html_to_file(html_data, "page_content_resume.html")
 print("HTML сохранен в 'page_content.html'")
