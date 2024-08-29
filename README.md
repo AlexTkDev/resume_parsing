@@ -1,4 +1,5 @@
 ## :hammer: Project in Progress :technologist:
+
  
 ### Installation
 1. **Clone the repository:**
@@ -75,18 +76,19 @@ This script is used to load the HTML content of a web page using Selenium and sa
 
 ---
 
-### 4. Script for Parsing Specific Resumes from work.ua Using Links from JSON File
+### 4. Script for Parsing and Saving Resumes from work.ua by Links in JSON File
 **Description:**
-This script extracts resume data from a list of URLs provided in a JSON file. It uses
-the `requests` library to fetch the HTML content of each resume page and `BeautifulSoup` 
-to parse it. The data is then saved into individual JSON files for each resume.
+This script extracts resume data from URLs listed in a JSON file, formats it, and saves it to 
+text files. It uses the `requests` library to perform HTTP requests and `BeautifulSoup` to parse 
+the HTML content of the resume pages. Each resume is saved as a `.txt` file in a designated 
+directory.
 
 **Key Functions:**
-- `get_user_links(file)`: Extracts all the values associated with the key `'link'` from a JSON file.
+- `get_user_links(file)`: Extracts all values of the 'link' key from the provided JSON file.
 - `clean_text(text)`: Cleans the text by removing unnecessary spaces and newline characters.
-- `get_separate_resume(url)`: Sends an HTTP request to the resume page, extracts and formats data such as title, name, and resume details.
-- `save_to_json(data, filename)`: Saves the extracted resume data to a JSON file.
-- `main(file)`: Main function that retrieves links from the JSON file, processes each link, and saves the resume data to individual JSON files named `resume_{user_id}.json`.
+- `get_separate_resume(url)`: Sends an HTTP request to the resume page URL, extracts and formats the resume data such as title, name, and details.
+- `save_to_txt(data, filename)`: Saves the extracted resume data to a text file.
+- `main(file)`: The main function that processes each link extracted from the JSON file. It creates a directory for saving resumes (if it doesn't already exist) and saves each resume in a `.txt` file named using the user ID extracted from the URL.
 
 **Example of running the script:**
 ```bash
@@ -186,18 +188,19 @@ JSON файл.
 
 ---
 
-### 4. Скрипт для парсинга отдельных резюме с work.ua по ссылкам из JSON файла
+### 4. Скрипт для парсинга и сохранения резюме с work.ua по ссылкам из JSON-файла
 **Описание:**
-Этот скрипт извлекает данные резюме из списка URL-ов, предоставленных в JSON файле. 
-Используются библиотеки `requests` для получения HTML-кода страницы резюме и `BeautifulSoup` 
-для его анализа. Данные сохраняются в отдельные JSON файлы для каждого резюме.
+Этот скрипт извлекает данные резюме из URL, указанных в JSON-файле, форматирует их и сохраняет в 
+текстовые файлы. Используются библиотеки `requests` для выполнения HTTP-запросов и `BeautifulSoup`
+для анализа HTML-кода страниц резюме. Каждое резюме сохраняется в формате `.txt` 
+в указанной директории.
 
 **Ключевые функции:**
-- `get_user_links(file)`: Извлекает все значения, связанные с ключом `'link'` из JSON файла.
+- `get_user_links(file)`: Извлекает все значения ключа 'link' из предоставленного JSON-файла.
 - `clean_text(text)`: Очищает текст, удаляя лишние пробелы и символы переноса строк.
-- `get_separate_resume(url)`: Выполняет HTTP-запрос к странице с резюме, извлекает и форматирует данные, такие как заголовок, имя и детали резюме.
-- `save_to_json(data, filename)`: Сохраняет извлеченные данные резюме в JSON файл.
-- `main(file)`: Основная функция, которая извлекает ссылки из JSON файла, обрабатывает каждую ссылку и сохраняет данные резюме в отдельные JSON файлы с именами `resume_{user_id}.json`.
+- `get_separate_resume(url)`: Отправляет HTTP-запрос к странице резюме по указанному URL, извлекает и форматирует данные резюме, такие как заголовок, имя и детали.
+- `save_to_txt(data, filename)`: Сохраняет извлеченные данные резюме в текстовый файл.
+- `main(file)`: Основная функция, которая обрабатывает каждую ссылку, извлеченную из JSON-файла. Создает директорию для сохранения резюме (если ее еще нет) и сохраняет каждое резюме в файл `.txt`, имя которого формируется из user ID, извлеченного из URL.
 
 **Пример запуска:**
 ```bash
