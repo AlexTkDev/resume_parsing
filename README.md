@@ -95,6 +95,33 @@ directory.
   python work_ua/get_separate_resume.py --file resumes_work_ua.json
 ```
 
+---
+
+### 5. Script for Parsing Resumes from robota.ua Using Selenium
+**Description:**
+This script extracts resume data from [robota.ua](https://robota.ua) using Selenium. 
+It reads candidate links and names from a JSON file, navigates to each resume page,
+and extracts information such as experience, skills, education, and languages. The extracted data
+is saved in a text file.
+
+**Key Functions:**
+- `setup_selenium()`: Configures the Selenium WebDriver to use Chrome in headless mode.
+- `get_user_data(file)`: Extracts candidate links and names from a JSON file.
+- `clean_text(text)`: Cleans text by removing unnecessary spaces and newline characters.
+- `get_separate_resume(driver, url)`: Extracts resume information from the given URL using Selenium, including experience, skills, education, and languages.
+- `save_to_txt(data, filename)`: Saves the extracted resume data to a text file.
+- `main(file)`: The main function that processes the JSON file with candidate data, extracts resumes, and saves them to text files.
+
+**Example of running the script:**
+```bash
+  python robota_ua/get_separate_resume.py --file resumes_robota_ua.json
+```
+
+**Notes:**
+- The `resumes_robota_ua.json` file should contain the candidate links and names.
+- The script saves the resumes in the `ready-made_resumes` directory, creating the directory 
+if it doesn't exist.
+
 ***
 
 ## :hammer: Проект в процессе разработки :technologist:
@@ -206,3 +233,29 @@ JSON файл.
 ```bash
   python work_ua/get_separate_resume.py --file resumes_work_ua.json
 ```
+
+---
+
+### 5. Скрипт для парсинга резюме с robota.ua с использованием Selenium
+**Описание:**
+Этот скрипт извлекает данные резюме с [robota.ua](https://robota.ua) с помощью Selenium. 
+Он считывает ссылки и имена кандидатов из JSON файла, переходит на каждую страницу резюме
+и извлекает информацию, такую как опыт работы, навыки, образование и языки. Извлеченные данные 
+сохраняются в текстовый файл.
+
+**Ключевые функции:**
+- `setup_selenium()`: Настраивает Selenium WebDriver для использования Chrome в режиме без отображения GUI (headless).
+- `get_user_data(file)`: Извлекает ссылки и имена кандидатов из JSON файла.
+- `clean_text(text)`: Очищает текст от лишних пробелов и символов переноса строк.
+- `get_separate_resume(driver, url)`: Извлекает информацию о резюме по заданному URL с помощью Selenium, включая опыт работы, навыки, образование и языки.
+- `save_to_txt(data, filename)`: Сохраняет извлеченные данные резюме в текстовый файл.
+- `main(file)`: Основная функция, которая обрабатывает JSON файл с данными кандидатов, извлекает резюме и сохраняет их в текстовые файлы.
+
+**Пример запуска скрипта:**
+```bash
+  python robota_ua/get_separate_resume.py --file resumes_robota_ua.json
+```
+
+**Примечания:**
+- Файл `resumes_robota_ua.json` должен содержать ссылки и имена кандидатов.
+- Скрипт сохраняет резюме в директорию `ready-made_resumes`, создавая директорию, если она не существует.
