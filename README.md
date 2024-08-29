@@ -75,21 +75,22 @@ This script is used to load the HTML content of a web page using Selenium and sa
 
 ---
 
-### 4. Script for Parsing a Specific Resume from work.ua by User ID
+### 4. Script for Parsing Specific Resumes from work.ua Using Links from JSON File
 **Description:**
-This script extracts data from a specific resume on [work.ua](https://work.ua) based on the user ID. It uses the `requests` library to perform HTTP requests and `BeautifulSoup` to parse the HTML content of the page. The data is saved in a JSON file.
+This script extracts resume data from a list of URLs provided in a JSON file. It uses
+the `requests` library to fetch the HTML content of each resume page and `BeautifulSoup` 
+to parse it. The data is then saved into individual JSON files for each resume.
 
 **Key Functions:**
-
+- `get_user_links(file)`: Extracts all the values associated with the key `'link'` from a JSON file.
 - `clean_text(text)`: Cleans the text by removing unnecessary spaces and newline characters.
 - `get_separate_resume(url)`: Sends an HTTP request to the resume page, extracts and formats data such as title, name, and resume details.
-- `save_to_json(data, filename)`: Saves the extracted data to a JSON file.
-- `main(user_id)`: The main function that forms the URL based on the user ID, extracts the resume data, and saves it to a file named `resume_{user_id}.json`.
+- `save_to_json(data, filename)`: Saves the extracted resume data to a JSON file.
+- `main(file)`: Main function that retrieves links from the JSON file, processes each link, and saves the resume data to individual JSON files named `resume_{user_id}.json`.
 
 **Example of running the script:**
-
 ```bash
-  python work_ua/get_separate_resume.py --userID 10856921
+  python work_ua/get_separate_resume.py --file resumes_work_ua.json
 ```
 
 ***
@@ -185,19 +186,20 @@ JSON файл.
 
 ---
 
-### 4. Скрипт для парсинга отдельного резюме с work.ua по ID пользователя
+### 4. Скрипт для парсинга отдельных резюме с work.ua по ссылкам из JSON файла
 **Описание:**
-Этот скрипт извлекает данные конкретного резюме с сайта [work.ua](https://work.ua) на основе ID пользователя. Используется библиотека `requests` для выполнения HTTP-запросов и `BeautifulSoup` для анализа HTML-кода страницы. Данные сохраняются в JSON файл.
+Этот скрипт извлекает данные резюме из списка URL-ов, предоставленных в JSON файле. 
+Используются библиотеки `requests` для получения HTML-кода страницы резюме и `BeautifulSoup` 
+для его анализа. Данные сохраняются в отдельные JSON файлы для каждого резюме.
 
 **Ключевые функции:**
-
-- `clean_text(text)`: Очищает текст от лишних пробелов и символов переноса строк.
-- `get_separate_resume(url)`: Выполняет HTTP-запрос к странице с резюме, извлекает и форматирует такие данные, как заголовок, имя и детали резюме.
-- `save_to_json(data, filename)`: Сохраняет извлеченные данные в JSON файл.
-- `main(user_id)`: Основная функция, которая формирует URL на основе ID пользователя, извлекает данные резюме и сохраняет их в файл `resume_{user_id}.json`.
+- `get_user_links(file)`: Извлекает все значения, связанные с ключом `'link'` из JSON файла.
+- `clean_text(text)`: Очищает текст, удаляя лишние пробелы и символы переноса строк.
+- `get_separate_resume(url)`: Выполняет HTTP-запрос к странице с резюме, извлекает и форматирует данные, такие как заголовок, имя и детали резюме.
+- `save_to_json(data, filename)`: Сохраняет извлеченные данные резюме в JSON файл.
+- `main(file)`: Основная функция, которая извлекает ссылки из JSON файла, обрабатывает каждую ссылку и сохраняет данные резюме в отдельные JSON файлы с именами `resume_{user_id}.json`.
 
 **Пример запуска:**
-
 ```bash
-   python work_ua/get_separate_resume.py --userID 10856921
+  python work_ua/get_separate_resume.py --file resumes_work_ua.json
 ```
