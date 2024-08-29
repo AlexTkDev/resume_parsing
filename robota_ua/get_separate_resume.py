@@ -62,10 +62,30 @@ def get_separate_resume(driver, url):
         languages = driver.find_element(By.CSS_SELECTOR,
                                         'alliance-shared-ui-prof-resume-languages').text
 
+        # Извлечение раздела "Додаткова інформація"
+        try:
+            additional_info_section = driver.find_element(
+                By.XPATH, "//section[h3[contains(text(), 'Додаткова інформація')]]")
+            additional_info = additional_info_section.find_element(
+                By.CSS_SELECTOR, 'div.santa-list').text
+        except NoSuchElementException:
+            additional_info = "No additional information provided."
+
+        # Извлечение раздела "Курси, тренінги, сертифікати"
+        try:
+            courses_section = driver.find_element(
+                By.CSS_SELECTOR, 'alliance-shared-ui-prof-resume-courses')
+            courses = courses_section.find_element(
+                By.CSS_SELECTOR, 'div.santa-mb-20').text
+        except NoSuchElementException:
+            courses = "No courses, trainings, or certificates provided."
+
         # Компоновка данных
         resume_data = (f"Experience:\n{clean_text(experience)}\n\nSkills:\n{clean_text(skills)}"
                        f"\n\nEducation:\n{clean_text(education)}\n\nLanguages:"
-                       f"\n{clean_text(languages)}")
+                       f"\n{clean_text(languages)}\n\nAdditional Information:"
+                       f"\n{clean_text(additional_info)}\n\nCourses, Trainings, Certificates:"
+                       f"\n{clean_text(courses)}")
 
         return resume_data
     except NoSuchElementException as e:
