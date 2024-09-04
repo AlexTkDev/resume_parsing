@@ -122,6 +122,33 @@ is saved in a text file.
 - The script saves the resumes in the `ready-made_resumes` directory, creating the directory 
 if it doesn't exist.
 
+---
+
+### 6. Resume Scoring and Sorting Script
+**Description:**
+This script scores and sorts resumes saved in text files based on their content. 
+It supports resumes from [robota.ua](https://robota.ua) and [work.ua](https://www.work.ua). 
+The scoring is based on resume completeness, keywords, work experience, education, 
+and additional criteria. The script sorts resumes by score in descending order and saves 
+the results to a text file.
+
+**Key Functions:**
+- `score_resume(resume_text)`: Scores the resume based on its content, including resume sections, keywords, work experience, education, and additional criteria.
+- `extract_experience_years(resume_text)`: Extracts the total number of years of experience from the resume text.
+- `load_resumes(resume_folder)`: Loads all resumes from the specified folder.
+- `sort_candidates_by_relevance(resumes)`: Sorts resumes by score in descending order based on the evaluation.
+- `main(resume_folder)`: The main function that loads resumes, scores and sorts them, and then saves the results to `sorted_candidates.txt`.
+
+**Example of running the script:**
+```bash
+  python sorting_resume.py --directory ready-made_resumes
+```
+
+**Notes:**
+- The script expects resumes to be located in the folder specified by the `--directory` argument.
+- Results will be saved in `sorted_candidates.txt`, containing the resume file name, score, and path to the resume.
+
+
 ***
 
 ## :hammer: Проект в процессе разработки :technologist:
@@ -259,3 +286,29 @@ JSON файл.
 **Примечания:**
 - Файл `resumes_robota_ua.json` должен содержать ссылки и имена кандидатов.
 - Скрипт сохраняет резюме в директорию `ready-made_resumes`, создавая директорию, если она не существует.
+
+---
+
+### 6. Скрипт для оценки и сортировки резюме
+**Описание:**
+Этот скрипт оценивает резюме, сохраненные в текстовых файлах, на основе их содержания.
+Он поддерживает резюме с сайтов [robota.ua](https://robota.ua) и [work.ua](https://www.work.ua).
+Оценка проводится по критериям полноты резюме, ключевых слов, опыта работы, образования и
+дополнительных критериев. Скрипт сортирует резюме по убыванию баллов и сохраняет результаты в
+текстовый файл.
+
+**Ключевые функции:**
+- `score_resume(resume_text)`: Оценивает резюме на основе содержания, включая секции резюме, ключевые слова, опыт работы, образование и дополнительные критерии.
+- `extract_experience_years(resume_text)`: Извлекает общее количество лет опыта из текста резюме.
+- `load_resumes(resume_folder)`: Загружает все резюме из указанной папки.
+- `sort_candidates_by_relevance(resumes)`: Сортирует резюме по убыванию баллов на основе оценки.
+- `main(resume_folder)`: Основная функция, загружает резюме, оценивает и сортирует их, а затем сохраняет результаты в файл `sorted_candidates.txt`.
+
+**Пример запуска скрипта:**
+```bash
+  python sorting_resume.py --directory ready-made_resumes
+```
+
+**Примечания:**
+- Скрипт ожидает, что резюме будут находиться в папке, указанной в аргументе `--directory`.
+- Результаты будут сохранены в файл `sorted_candidates.txt`, содержащий имя файла резюме, оценку и путь к резюме.
