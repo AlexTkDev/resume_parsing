@@ -135,7 +135,7 @@ the results to a text file.
 
 **Example of running the script:**
 ```bash
-  python sorting_resume.py --directory ready-made_resumes
+  python sorting_resume/sorting_resume.py --directory ready-made_resumes
 ```
 
 **Notes:**
@@ -294,7 +294,7 @@ JSON файл.
 
 **Пример запуска скрипта:**
 ```bash
-  python sorting_resume.py --directory ready-made_resumes
+  python sorting_resume/sorting_resume.py --directory ready-made_resumes
 ```
 
 **Примечания:**
