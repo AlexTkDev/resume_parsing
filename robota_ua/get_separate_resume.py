@@ -135,7 +135,6 @@ def main(file):
 
     for data in user_data:
         link = data['link']
-        name = data['name']
         print(f'Processing page: {link}')
         resume, courses = get_separate_resume(driver, link)
 
