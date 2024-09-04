@@ -12,3 +12,4 @@ filename =
     robota_ua/get_resume.py
     robota_ua/get_separate_resume.py
     other_tools/get_all_html.py
+    sorting_resume.py
