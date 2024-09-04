@@ -27,4 +27,5 @@ jobs:
       - name: Lint with flake8
         run: |
           flake8 --count --exit-zero --max-line-length=99 --ignore=E501 --statistics \
-          --filename=work_ua/get_resume.py,work_ua/get_separate_resume.py,robota_ua/get_resume.py,robota_ua/get_separate_resume.py,other_tools/get_all_html.py
+          --filename=work_ua/get_resume.py,work_ua/get_separate_resume.py,robota_ua/get_resume
+          .py,robota_ua/get_separate_resume.py,other_tools/get_all_html.py,sorting_resume.py
