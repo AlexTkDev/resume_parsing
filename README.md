@@ -4,8 +4,8 @@
 ### Installation
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/AlexTkDev/resume_parsing_and_telegram_bot.git
-   cd resume_parsing_and_telegram_bot
+   git clone https://github.com/AlexTkDev/resume_parsing.git
+   cd resume_parsing
    ```
 
 2. **Create and activate a virtual environment:**
@@ -156,8 +156,8 @@ the results to a text file.
 ### Установка
 1. **Клонируйте репозиторий:**
    ```bash
-   git clone https://github.com/AlexTkDev/resume_parsing_and_telegram_bot.git
-   cd resume_parsing_and_telegram_bot
+   git clone https://github.com/AlexTkDev/resume_parsing.git
+   cd resume_parsing
    ```
 
 2. **Создайте и активируйте виртуальное окружение:**
