@@ -94,7 +94,7 @@ def main(resume_folder):
 
 
 if __name__ == "__main__":
-    # python sorting_resume.py --directory ready-made_resumes
+    # python sorting_resume/sorting_resume.py --directory ready-made_resumes
     parser = argparse.ArgumentParser(description="Оценка резюме")
     parser.add_argument("--directory", type=str, required=True,
                         help="Папка с резюме")
