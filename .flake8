@@ -7,9 +7,9 @@ max-line-length = 99
 
 # Файлы для проверки
 filename =
+    sorting_resume.py
     work_ua/get_resume.py
     work_ua/get_separate_resume.py
     robota_ua/get_resume.py
     robota_ua/get_separate_resume.py
     other_tools/get_all_html.py
-    sorting_resume.py
