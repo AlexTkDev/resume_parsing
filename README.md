@@ -1,4 +1,4 @@
-## :hammer: Project in Progress :technologist:
+## :technologist: Solution on Python that allows parsing and sorting of resumes from popular job websites.
 
  
 ### :card_file_box: Installation
@@ -145,7 +145,7 @@ the results to a text file.
 
 ***
 
-## :hammer: Проект в процессе разработки :technologist:
+## :technologist: Решение на Python, позволяющее парсить и сортировать резюме с популярных сайтов вакансий.
 
 ### :card_file_box: Установка
 1. **Клонируйте репозиторий:**
