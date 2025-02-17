@@ -143,8 +143,8 @@ the results to a text file.
 - Results will be saved in `sorted_candidates.txt`, containing the resume file name, score, and path to the resume.
 
 
-
-**Collaborate:**
+### 7. Collaborate
+- If you have any suggestions or improvements, please feel free to contribute.
 - Fork this repository.
 - Create a new branch with a meaningful name.
 - Open a pull request.
