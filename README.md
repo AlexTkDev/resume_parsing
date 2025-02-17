@@ -142,3 +142,11 @@ the results to a text file.
 - The script expects resumes to be located in the folder specified by the `--directory` argument.
 - Results will be saved in `sorted_candidates.txt`, containing the resume file name, score, and path to the resume.
 
+
+
+**Collaborate:**
+- Fork this repository.
+- Create a new branch with a meaningful name.
+- Open a pull request.
+- Your changes will be reviewed and merged.
+- Thank you for your contribution!
