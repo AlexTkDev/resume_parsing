@@ -1,0 +1,30 @@
+keywords:
+  - Python
+  - Django
+  - REST API
+  - SQL
+  - JavaScript
+  - Docker
+  - AWS
+sections:
+  robota_ua:
+    - Experience
+    - Skills
+    - Education
+    - Languages
+    - Additional Information
+    - Courses, trainings, certificates
+  work_ua:
+    - Title
+    - Name
+    - Details
+weights:
+  section_found: 10
+  section_missing: -2
+  keyword: 5
+  experience:
+    more_than_5: 15
+    between_3_and_5: 10
+    less_than_3: 5
+  education: 5
+  certificate: 3 
