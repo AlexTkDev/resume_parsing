@@ -5,11 +5,12 @@ exclude =
 
 max-line-length = 99
 
-# Файлы для проверки
 filename =
     sorting_resume/sorting_resume.py
     work_ua/get_resume.py
     work_ua/get_separate_resume.py
+    work_ua/html_stream_parser.py
     robota_ua/get_resume.py
     robota_ua/get_separate_resume.py
+    robota_ua/html_stream_parser.py
     other_tools/get_all_html.py

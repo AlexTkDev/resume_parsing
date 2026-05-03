@@ -1,3 +1,5 @@
+import argparse
+
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromeService
 from webdriver_manager.chrome import ChromeDriverManager
@@ -6,36 +8,46 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 
-# Настройка Selenium
 chrome_options = Options()
-chrome_options.add_argument("--headless")  # Работать в фоновом режиме без GUI
+chrome_options.add_argument("--headless")
 
 
 def get_data_by_selenium(url: str) -> str:
-    """Звертається до сервера за url адресою і повертає HTML сайту"""
+    """Load a page with Selenium and return its HTML."""
     service = ChromeService(ChromeDriverManager().install())
     with webdriver.Chrome(service=service, options=chrome_options) as driver:
         driver.get(url)
-        print(f"Страница загружена: {driver.title}")  # Вывести заголовок страницы
+        print(f"Page loaded: {driver.title}")
         try:
-            # Дождаться загрузки HTML
             WebDriverWait(driver, 60).until(
                 EC.presence_of_element_located((By.TAG_NAME, "body"))
             )
             data = driver.page_source
         except Exception as e:
-            print(f"Ошибка: {e}")
-            data = driver.page_source  # Вернуть HTML даже если есть ошибка
+            print(f"Error: {e}")
+            data = driver.page_source
     return data
 
 
 def save_html_to_file(html_content: str, file_path: str):
-    """Сохраняет HTML контент в файл"""
+    """Save HTML content to a file."""
     with open(file_path, 'w', encoding='utf-8') as file:
         file.write(html_content)
 
 
-url = "https://robota.ua/candidates/8041308"
-html_data = get_data_by_selenium(url)
-save_html_to_file(html_data, "page_content_resume.html")
-print("HTML сохранен в 'page_content.html'")
+def main(url: str, output: str):
+    html_data = get_data_by_selenium(url)
+    save_html_to_file(html_data, output)
+    print(f"HTML saved to '{output}'")
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Save a rendered HTML page.")
+    parser.add_argument("url", help="Page URL to load")
+    parser.add_argument(
+        "--output",
+        default="page_content.html",
+        help="Output HTML file path (default: page_content.html)",
+    )
+    args = parser.parse_args()
+    main(args.url, args.output)
