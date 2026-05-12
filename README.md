@@ -1,16 +1,16 @@
 # Resume Parser
 
-Собирает резюме с work.ua и robota.ua, экспортирует профили кандидатов и ранжирует их по релевантности.
+Collects resumes from work.ua and robota.ua, exports candidate profiles, and ranks them by relevance.
 
-## Что умеет
+## Features
 
-- Парсит листинги резюме с двух платформ
-- Экспортирует отдельные резюме в текстовые файлы
-- Ранжирует кандидатов по ключевым навыкам, опыту, образованию
-- Работает через requests (work.ua) и Selenium (robota.ua)
-- Настраивается через переменные окружения
+- Parses resume listings from both platforms
+- Exports individual resumes to text files
+- Ranks candidates by skills, experience, education
+- Uses requests for work.ua and Selenium for robota.ua
+- Configurable via environment variables
 
-## Быстрый старт
+## Quick Start
 
 ```bash
 git clone https://github.com/AlexTkDev/resume_parsing.git
@@ -20,54 +20,54 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-Настройки хранятся в `.env` (скопируйте из `.env.example`).
+Settings are stored in `.env` (copy from `.env.example`).
 
-## Использование
+## Usage
 
-**Собрать листинги:**
+**Collect listings:**
 ```bash
 python work_ua/get_resume.py --pages 2 --skill python
 python robota_ua/get_resume.py --pages 2 --skill python
 ```
 
-**Экспортировать резюме:**
+**Export resumes:**
 ```bash
 python work_ua/get_separate_resume.py --file resumes_work_ua.json
 python robota_ua/get_separate_resume.py --file resumes_robota_ua.json
 ```
 
-**Ранжировать кандидатов:**
+**Rank candidates:**
 ```bash
 python sorting_resume/sorting_resume.py --directory ready-made_resumes
 ```
 
-## Структура проекта
+## Project Structure
 
-| Папка | Назначение |
-|-------|------------|
-| `core/` | Общие утилиты: HTTP, Selenium, логирование |
-| `parsers/` | Парсеры с селекторами в JSON |
-| `work_ua/` | Скрипты для work.ua |
-| `robota_ua/` | Скрипты для robota.ua (Selenium) |
-| `sorting_resume/` | Подсчёт релевантности |
-| `tests/` | Тесты |
+| Folder | Purpose |
+|--------|---------|
+| `core/` | Shared utilities: HTTP, Selenium, logging |
+| `parsers/` | Parsers with JSON selectors |
+| `work_ua/` | work.ua scripts |
+| `robota_ua/` | robota.ua scripts (Selenium) |
+| `sorting_resume/` | Relevance scoring |
+| `tests/` | Unit tests |
 
-## Настройки
+## Settings
 
-| Переменная | По умолчанию | Описание |
-|------------|--------------|----------|
-| `REQUEST_TIMEOUT` | 10 | Таймаут HTTP-запросов, сек |
-| `SLEEP_MIN` | 5 | Минимальная задержка между запросами |
-| `SLEEP_MAX` | 20 | Максимальная задержка между запросами |
-| `HEADLESS` | true | Запуск Chrome без GUI |
-| `LOG_LEVEL` | INFO | Уровень логирования |
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `REQUEST_TIMEOUT` | 10 | HTTP request timeout, sec |
+| `SLEEP_MIN` | 5 | Min delay between requests |
+| `SLEEP_MAX` | 20 | Max delay between requests |
+| `HEADLESS` | true | Run Chrome without GUI |
+| `LOG_LEVEL` | INFO | Logging level |
 
-## Тесты
+## Tests
 
 ```bash
 pytest
 ```
 
-## Примечание
+## Note
 
-Парсеры используют селекторы из `parsers/selectors.json`. Если сайты изменят вёрстку — обновите селекторы в этом файле.
+Parsers use selectors from `parsers/selectors.json`. If sites change their layout, update the selectors in this file.
