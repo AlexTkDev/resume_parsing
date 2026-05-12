@@ -11,17 +11,12 @@ from core.logging_config import setup_logging
 
 logger = logging.getLogger(__name__)
 
-_CONFIG: dict[str, Any] = {}
-
 
 def _load_config() -> dict[str, Any]:
     """Load configuration from JSON file."""
-    global _CONFIG
-    if not _CONFIG:
-        config_path = os.path.join(os.path.dirname(__file__), "config.json")
-        with open(config_path, "r", encoding="utf-8") as f:
-            _CONFIG = json.load(f)
-    return _CONFIG
+    config_path = os.path.join(os.path.dirname(__file__), "config.json")
+    with open(config_path, "r", encoding="utf-8") as f:
+        return json.load(f)
 
 
 def score_resume(resume_text: str) -> int:

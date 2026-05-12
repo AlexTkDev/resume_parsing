@@ -4,23 +4,19 @@ import json
 import logging
 import os
 from html.parser import HTMLParser
+from urllib.parse import urljoin
 from typing import Any
 
 from core.utils import clean_text, attr_value, has_classes
 
 logger = logging.getLogger(__name__)
 
-_SELECTORS: dict[str, Any] = {}
-
 
 def _load_selectors() -> dict[str, Any]:
     """Load selectors from JSON file."""
-    global _SELECTORS
-    if not _SELECTORS:
-        config_path = os.path.join(os.path.dirname(__file__), "selectors.json")
-        with open(config_path, "r", encoding="utf-8") as f:
-            _SELECTORS = json.load(f)
-    return _SELECTORS["robota_ua"]
+    selectors_path = os.path.join(os.path.dirname(__file__), "selectors.json")
+    with open(selectors_path, "r", encoding="utf-8") as f:
+        return json.load(f)["robota_ua"]
 
 
 class RobotaUaListingParser(HTMLParser):
