@@ -33,6 +33,7 @@ sort-resumes = "sorting_resume.sorting_resume:main"
 [tool.setuptools.packages.find]
 where = ["."]
 include = ["core*", "parsers*", "work_ua*", "robota_ua*", "sorting_resume*", "other_tools*"]
+exclude = ["tests*"]
 
 [build-system]
 requires = ["setuptools>=61.0"]
