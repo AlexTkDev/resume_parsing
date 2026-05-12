@@ -6,7 +6,7 @@ import os
 import re
 
 from core.logging_config import setup_logging
-from sorting_resume.config import CONFIG
+from .config import CONFIG
 
 logger = logging.getLogger(__name__)
 

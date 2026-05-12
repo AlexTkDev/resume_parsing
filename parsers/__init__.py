@@ -1,7 +1,7 @@
 """Parsers package."""
 
-from parsers.work_ua import WorkUaListingParser, WorkUaResumeParser, parse_work_ua_listings, parse_work_ua_resume
-from parsers.robota_ua import RobotaUaListingParser, RobotaUaResumeParser, parse_robota_ua_listings, parse_robota_ua_resume
+from .work_ua import WorkUaListingParser, WorkUaResumeParser, parse_work_ua_listings, parse_work_ua_resume
+from .robota_ua import RobotaUaListingParser, RobotaUaResumeParser, parse_robota_ua_listings, parse_robota_ua_resume
 
 __all__ = [
     "WorkUaListingParser",

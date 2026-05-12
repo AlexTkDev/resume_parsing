@@ -6,7 +6,7 @@ from urllib.parse import urljoin
 from typing import Any
 
 from core.utils import clean_text, attr_value, has_classes
-from parsers.selectors import ROBOTA_UA
+from .selectors import ROBOTA_UA
 
 logger = logging.getLogger(__name__)
 
