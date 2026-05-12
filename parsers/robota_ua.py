@@ -1,22 +1,14 @@
 """Robota.ua parsers for resume listings and individual resumes."""
 
-import json
 import logging
-import os
 from html.parser import HTMLParser
 from urllib.parse import urljoin
 from typing import Any
 
 from core.utils import clean_text, attr_value, has_classes
+from parsers.selectors import ROBOTA_UA
 
 logger = logging.getLogger(__name__)
-
-
-def _load_selectors() -> dict[str, Any]:
-    """Load selectors from JSON file."""
-    selectors_path = os.path.join(os.path.dirname(__file__), "selectors.json")
-    with open(selectors_path, "r", encoding="utf-8") as f:
-        return json.load(f)["robota_ua"]
 
 
 class RobotaUaListingParser(HTMLParser):
@@ -24,7 +16,7 @@ class RobotaUaListingParser(HTMLParser):
 
     def __init__(self) -> None:
         super().__init__(convert_charrefs=True)
-        selectors = _load_selectors()["listing"]
+        selectors = ROBOTA_UA["listing"]
         self.base_url = selectors["base_url"]
         self.fields = selectors["fields"]
         self.card_tag = selectors["card_tag"]
@@ -101,7 +93,7 @@ class RobotaUaResumeParser(HTMLParser):
 
     def __init__(self) -> None:
         super().__init__(convert_charrefs=True)
-        selectors = _load_selectors()["resume"]
+        selectors = ROBOTA_UA["resume"]
         self.section_fields = selectors["section_fields"]
         self.defaults = selectors["defaults"]
         self.field_selectors = selectors["selectors"]

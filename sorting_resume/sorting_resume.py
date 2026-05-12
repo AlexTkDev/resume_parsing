@@ -1,22 +1,14 @@
 """Score and sort resumes based on relevance criteria."""
 
 import argparse
-import json
 import logging
 import os
 import re
-from typing import Any
 
 from core.logging_config import setup_logging
+from sorting_resume.config import CONFIG
 
 logger = logging.getLogger(__name__)
-
-
-def _load_config() -> dict[str, Any]:
-    """Load configuration from JSON file."""
-    config_path = os.path.join(os.path.dirname(__file__), "config.json")
-    with open(config_path, "r", encoding="utf-8") as f:
-        return json.load(f)
 
 
 def score_resume(resume_text: str) -> int:
@@ -24,46 +16,45 @@ def score_resume(resume_text: str) -> int:
     if not resume_text.strip():
         return 0
 
-    config = _load_config()
     score = 0
 
     if "Experience" in resume_text or "Skills" in resume_text or "Education" in resume_text:
-        for section in config["sections"]["full"]:
+        for section in CONFIG["sections"]["full"]:
             if section in resume_text:
-                score += config["section_weights"]["full"]
+                score += CONFIG["section_weights"]["full"]
             else:
-                score += config["section_weights"]["missing_penalty"]
+                score += CONFIG["section_weights"]["missing_penalty"]
     else:
-        for section in config["sections"]["basic"]:
+        for section in CONFIG["sections"]["basic"]:
             if section in resume_text:
-                score += config["section_weights"]["basic"]
+                score += CONFIG["section_weights"]["basic"]
             else:
-                score += config["section_weights"]["missing_penalty"]
+                score += CONFIG["section_weights"]["missing_penalty"]
 
-    for keyword in config["keywords"]:
+    for keyword in CONFIG["keywords"]:
         if keyword.lower() in resume_text.lower():
-            score += config["keyword_weight"]
+            score += CONFIG["keyword_weight"]
 
     experience_years = extract_experience_years(resume_text)
-    for threshold in config["experience_thresholds"]:
+    for threshold in CONFIG["experience_thresholds"]:
         if experience_years >= threshold["min"]:
             score += threshold["score"]
             break
 
-    for pattern in config["education_patterns"]:
+    for pattern in CONFIG["education_patterns"]:
         if re.search(rf"\b{pattern}\b", resume_text, re.IGNORECASE):
-            score += config["education_weight"]
+            score += CONFIG["education_weight"]
             break
 
     if "certificates" in resume_text.lower() or "courses" in resume_text.lower():
         cert_count = len(
             re.findall(
-                rf"({"|".join(config["certificate_keywords"])})",
+                rf"({"|".join(CONFIG["certificate_keywords"])})",
                 resume_text,
                 re.IGNORECASE,
             )
         )
-        score += cert_count * config["certificate_weight"]
+        score += cert_count * CONFIG["certificate_weight"]
 
     logger.debug("Scored resume: %d points", score)
     return score
@@ -71,8 +62,7 @@ def score_resume(resume_text: str) -> int:
 
 def extract_experience_years(resume_text: str) -> int:
     """Extract total years of experience from common English and Ukrainian forms."""
-    config = _load_config()
-    pattern = rf"(\d+)\+?\s*(?:years?|yrs?|років|роки|рік)"
+    pattern = r"(\d+)\+?\s*(?:years?|yrs?|років|роки|рік)"
     matches = re.findall(pattern, resume_text, re.IGNORECASE)
 
     try:
