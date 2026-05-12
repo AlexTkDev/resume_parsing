@@ -30,3 +30,7 @@ jobs:
       - name: Lint with flake8
         run: |
           flake8 --count --statistics
+
+      - name: Run tests
+        run: |
+          pytest --tb=short -q

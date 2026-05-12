@@ -1,97 +1,143 @@
+"""Score and sort resumes based on relevance criteria."""
+
+import argparse
+import json
+import logging
 import os
 import re
-import argparse
+from typing import Any
+
+from core.logging_config import setup_logging
+
+logger = logging.getLogger(__name__)
+
+_CONFIG: dict[str, Any] = {}
 
 
-def score_resume(resume_text):
+def _load_config() -> dict[str, Any]:
+    """Load configuration from JSON file."""
+    global _CONFIG
+    if not _CONFIG:
+        config_path = os.path.join(os.path.dirname(__file__), "config.json")
+        with open(config_path, "r", encoding="utf-8") as f:
+            _CONFIG = json.load(f)
+    return _CONFIG
+
+
+def score_resume(resume_text: str) -> int:
+    """Calculate a score for a resume based on various criteria."""
+    if not resume_text.strip():
+        return 0
+
+    config = _load_config()
     score = 0
 
-    if 'Experience' in resume_text or 'Skills' in resume_text or 'Education' in resume_text:
-        sections = ['Experience', 'Skills', 'Education', 'Languages', 'Additional Information',
-                    'Courses, trainings, certificates']
-        for section in sections:
+    if "Experience" in resume_text or "Skills" in resume_text or "Education" in resume_text:
+        for section in config["sections"]["full"]:
             if section in resume_text:
-                score += 10
+                score += config["section_weights"]["full"]
             else:
-                score -= 2
+                score += config["section_weights"]["missing_penalty"]
     else:
-        basic_sections = ['Title', 'Name', 'Details']
-        for section in basic_sections:
+        for section in config["sections"]["basic"]:
             if section in resume_text:
-                score += 5
+                score += config["section_weights"]["basic"]
             else:
-                score -= 2
+                score += config["section_weights"]["missing_penalty"]
 
-    keywords = ['Python', 'Django', 'REST API', 'SQL', 'JavaScript', 'Docker', 'AWS']
-    for keyword in keywords:
-        if re.search(rf'\b{keyword}\b', resume_text, re.IGNORECASE):
-            score += 5
+    for keyword in config["keywords"]:
+        if keyword.lower() in resume_text.lower():
+            score += config["keyword_weight"]
 
     experience_years = extract_experience_years(resume_text)
-    if experience_years >= 5:
-        score += 15
-    elif 3 <= experience_years < 5:
-        score += 10
-    elif experience_years < 3:
-        score += 5
+    for threshold in config["experience_thresholds"]:
+        if experience_years >= threshold["min"]:
+            score += threshold["score"]
+            break
 
-    if re.search(r'(Bachelor|Master|MCA|BCA|Computer Science|Engineering)', resume_text,
-                 re.IGNORECASE):
-        score += 5
+    for pattern in config["education_patterns"]:
+        if re.search(rf"\b{pattern}\b", resume_text, re.IGNORECASE):
+            score += config["education_weight"]
+            break
 
-    if 'certificates' in resume_text.lower() or 'courses' in resume_text.lower():
-        score += len(re.findall(r'(certificate|course)', resume_text, re.IGNORECASE)) * 3
+    if "certificates" in resume_text.lower() or "courses" in resume_text.lower():
+        cert_count = len(
+            re.findall(
+                rf"({"|".join(config["certificate_keywords"])})",
+                resume_text,
+                re.IGNORECASE,
+            )
+        )
+        score += cert_count * config["certificate_weight"]
 
+    logger.debug("Scored resume: %d points", score)
     return score
 
 
-def extract_experience_years(resume_text):
+def extract_experience_years(resume_text: str) -> int:
     """Extract total years of experience from common English and Ukrainian forms."""
-    matches = re.findall(
-        r'(\d+)\+?\s*(?:years?|yrs?|років|роки|рік)',
-        resume_text,
-        re.IGNORECASE,
-    )
-    years = sum(int(match) for match in matches)
+    config = _load_config()
+    pattern = rf"(\d+)\+?\s*(?:years?|yrs?|років|роки|рік)"
+    matches = re.findall(pattern, resume_text, re.IGNORECASE)
+
+    try:
+        years = sum(int(match) for match in matches)
+    except ValueError:
+        years = 0
+
     return years
 
 
-def load_resumes(resume_folder):
+def load_resumes(resume_folder: str) -> dict[str, str]:
+    """Load all resume text files from a directory."""
     if not os.path.isdir(resume_folder):
         raise FileNotFoundError(f"Resume directory does not exist: {resume_folder}")
 
-    resumes = {}
+    resumes: dict[str, str] = {}
     for filename in sorted(os.listdir(resume_folder)):
-        if filename.endswith('.txt'):
-            with open(os.path.join(resume_folder, filename), 'r', encoding='utf-8') as file:
+        if filename.endswith(".txt"):
+            filepath = os.path.join(resume_folder, filename)
+            with open(filepath, "r", encoding="utf-8") as file:
                 resumes[filename] = file.read()
+            logger.debug("Loaded resume: %s", filename)
     return resumes
 
 
-def sort_candidates_by_relevance(resumes):
-    scored_resumes = {}
+def sort_candidates_by_relevance(resumes: dict[str, str]) -> list[tuple[str, int]]:
+    """Sort resumes by their relevance score in descending order."""
+    scored_resumes: dict[str, int] = {}
     for filename, text in resumes.items():
-        score = score_resume(text)
-        scored_resumes[filename] = score
+        scored_resumes[filename] = score_resume(text)
 
-    sorted_resumes = sorted(scored_resumes.items(), key=lambda item: (-item[1], item[0].lower()))
+    sorted_resumes = sorted(
+        scored_resumes.items(), key=lambda item: (-item[1], item[0].lower())
+    )
+    logger.info("Sorted %d resumes by relevance", len(sorted_resumes))
     return sorted_resumes
 
 
-def main(resume_folder):
+def main(resume_folder: str) -> None:
+    """Main entry point for scoring and sorting resumes."""
     resumes = load_resumes(resume_folder)
     sorted_candidates = sort_candidates_by_relevance(resumes)
 
-    with open('sorted_candidates.txt', 'w', encoding='utf-8') as txt_file:
+    with open("sorted_candidates.txt", "w", encoding="utf-8") as txt_file:
         for filename, score in sorted_candidates:
             resume_path = os.path.abspath(os.path.join(resume_folder, filename))
-            txt_file.write(f'{filename}: {score} points\nResume path: {resume_path}\n\n')
+            txt_file.write(f"{filename}: {score} points\nResume path: {resume_path}\n\n")
+
+    logger.info("Results saved to sorted_candidates.txt")
 
 
 if __name__ == "__main__":
-    # python sorting_resume/sorting_resume.py --directory ready-made_resumes
     parser = argparse.ArgumentParser(description="Score and sort resumes.")
-    parser.add_argument("--directory", type=str, required=True,
-                        help="Directory with resume text files")
+    parser.add_argument(
+        "--directory",
+        type=str,
+        required=True,
+        help="Directory with resume text files",
+    )
     args = parser.parse_args()
+
+    setup_logging()
     main(args.directory)

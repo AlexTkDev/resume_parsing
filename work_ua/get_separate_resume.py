@@ -1,82 +1,50 @@
-import requests
-import json
+"""Export individual resumes from work.ua."""
+
 import argparse
+import logging
 import os
 from urllib.parse import urlparse
 
-from html_stream_parser import parse_resume_page
+from core.logging_config import setup_logging
+from core.utils import get_user_links_from_file, save_to_txt
+from core.http import fetch_with_retry
 
-REQUEST_TIMEOUT = 20
-REQUEST_HEADERS = {
-    "User-Agent": (
-        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
-        "AppleWebKit/537.36 (KHTML, like Gecko) "
-        "Chrome/124.0 Safari/537.36"
-    )
-}
+from parsers.work_ua import parse_work_ua_resume
+
+logger = logging.getLogger(__name__)
 
 
-def get_user_links(file):
-    """Extract all link values from a JSON file."""
-    links = []
-    if not os.path.exists(file) or os.path.getsize(file) == 0:
-        print(f"No data found in {file}.")
-        return links
-
-    try:
-        with open(file, 'r', encoding='utf-8') as json_file:
-            data = json.load(json_file)
-    except json.JSONDecodeError:
-        print(f"Invalid JSON in {file}.")
-        return links
-
-    if not isinstance(data, list):
-        print(f"{file} must contain a JSON list.")
-        return links
-
-    for item in data:
-        if isinstance(item, dict) and item.get('link') and item['link'] != 'No link':
-            links.append(item['link'])
-    return links
-
-
-def get_separate_resume(url):
-    try:
-        response = requests.get(url, headers=REQUEST_HEADERS, timeout=REQUEST_TIMEOUT)
-        response.raise_for_status()
-    except requests.RequestException as exc:
-        print(f"Request failed for {url}: {exc}")
+def get_separate_resume(url: str) -> str:
+    """Fetch and parse a single resume from a URL."""
+    html = fetch_with_retry(url)
+    if html is None:
+        logger.error("Failed to fetch resume from %s", url)
         return "No resume found."
-
-    return parse_resume_page(response.text)
-
-
-def save_to_txt(data, filename):
-    """Save extracted resume data as a text file."""
-    with open(filename, 'w', encoding='utf-8') as txt_file:
-        txt_file.write(data)
+    return parse_work_ua_resume(html)
 
 
-def main(file):
-    links = get_user_links(file)
+def main(file: str) -> None:
+    """Main entry point for exporting individual resumes."""
+    links = get_user_links_from_file(file)
     if not links:
-        print("No links found in the file.")
+        logger.warning("No links found in the file.")
         return
 
-    output_dir = 'ready-made_resumes'
+    output_dir = "ready-made_resumes"
     os.makedirs(output_dir, exist_ok=True)
 
     for link in links:
-        print(f'Processing page: {link}')
+        logger.info("Processing page: %s", link)
         resume = get_separate_resume(link)
-        user_id = urlparse(link).path.rstrip('/').split('/')[-1] or "unknown"
-        save_to_txt(resume, os.path.join(output_dir, f'resume_{user_id}.txt'))
+        user_id = urlparse(link).path.rstrip("/").split("/")[-1] or "unknown"
+        save_to_txt(resume, os.path.join(output_dir, f"resume_{user_id}.txt"))
+        logger.debug("Saved resume %s", user_id)
 
 
 if __name__ == "__main__":
-    #   python work_ua/get_separate_resume.py --file resumes_work_ua.json
-    parser = argparse.ArgumentParser(description="Export separate resume files.")
-    parser.add_argument('--file', type=str, required=True,
-                        help='JSON file with resume links')
+    parser = argparse.ArgumentParser(description="Export separate resume files from work.ua.")
+    parser.add_argument("--file", type=str, required=True, help="JSON file with resume links")
     args = parser.parse_args()
+
+    setup_logging()
     main(args.file)

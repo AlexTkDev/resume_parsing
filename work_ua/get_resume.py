@@ -1,98 +1,59 @@
-import requests
-import json
-import os
-import time
-import random
+"""Fetch resume listings from work.ua."""
+
 import argparse
+import logging
+from typing import Any
 
 from tqdm import tqdm
 
-from html_stream_parser import parse_resume_listings
+from core.logging_config import setup_logging
+from core.utils import save_to_json
+from core.http import fetch_with_retry, rate_limit
 
-REQUEST_TIMEOUT = 20
-REQUEST_HEADERS = {
-    "User-Agent": (
-        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
-        "AppleWebKit/537.36 (KHTML, like Gecko) "
-        "Chrome/124.0 Safari/537.36"
-    )
-}
+from parsers.work_ua import parse_work_ua_listings
+
+logger = logging.getLogger(__name__)
 
 
-def load_json_list(filename):
-    if not os.path.exists(filename) or os.path.getsize(filename) == 0:
+def fetch_resumes(url: str) -> list[dict[str, Any]]:
+    """Fetch and parse resume listings from a URL."""
+    html = fetch_with_retry(url)
+    if html is None:
         return []
-
-    try:
-        with open(filename, 'r', encoding='utf-8') as json_file:
-            data = json.load(json_file)
-    except json.JSONDecodeError:
-        print(f"Warning: {filename} is not valid JSON. Starting with an empty list.")
-        return []
-
-    if not isinstance(data, list):
-        print(f"Warning: {filename} must contain a JSON list. Starting with an empty list.")
-        return []
-
-    return data
+    return parse_work_ua_listings(html)
 
 
-def fetch_resumes(url):
-    try:
-        response = requests.get(url, headers=REQUEST_HEADERS, timeout=REQUEST_TIMEOUT)
-        response.raise_for_status()
-    except requests.RequestException as exc:
-        print(f"Request failed for {url}: {exc}")
-        return []
-
-    return parse_resume_listings(response.text)
-
-
-def save_to_json(data, filename):
-    existing_data = load_json_list(filename)
-    unique_resumes = {}
-
-    for item in existing_data + data:
-        link = item.get('link') if isinstance(item, dict) else None
-        if link and link != 'No link':
-            unique_resumes[link] = item
-
-    with open(filename, 'w', encoding='utf-8') as json_file:
-        json.dump(list(unique_resumes.values()), json_file, ensure_ascii=False, indent=4)
-
-
-def main(pages, skill=None):
+def main(pages: int, skill: str | None = None) -> None:
+    """Main entry point for fetching resume listings."""
     if skill:
         base_url = f"https://www.work.ua/resumes-{skill}/"
     else:
         base_url = "https://www.work.ua/resumes/?ss=1"
 
     for page in tqdm(range(1, pages + 1), desc="Processing pages"):
-        separator = '&' if '?' in base_url else '?'
+        separator = "&" if "?" in base_url else "?"
         url = f"{base_url}{separator}page={page}"
-        print(f"\nProcessing page {page}...")
+        logger.info("Processing page %d: %s", page, url)
 
-        sleep_time = random.randint(5, 20)
-        print(f"Waiting {sleep_time} seconds...")
-        time.sleep(sleep_time)
+        rate_limit()
 
         resumes = fetch_resumes(url)
 
         if not resumes:
-            print(f"No resumes found on page {page}. Stopping.")
+            logger.warning("No resumes found on page %d. Stopping.", page)
             break
 
-        save_to_json(resumes, 'resumes_work_ua.json')
+        save_to_json(resumes, "resumes_work_ua.json")
+        logger.info("Saved %d resumes from page %d", len(resumes), page)
 
-    print("Data saved to resumes_work_ua.json")
+    logger.info("Data saved to resumes_work_ua.json")
 
 
 if __name__ == "__main__":
-    #  python work_ua/get_resume.py --pages 2 --skill python
-    parser = argparse.ArgumentParser(description="Parse resume listings.")
-    parser.add_argument('--pages', type=int, default=5,
-                        help='Number of pages to process (default: 5)')
-    parser.add_argument('--skill', type=str, default=None,
-                        help='Search keyword, for example "python"')
+    parser = argparse.ArgumentParser(description="Parse resume listings from work.ua.")
+    parser.add_argument("--pages", type=int, default=5, help="Number of pages to process (default: 5)")
+    parser.add_argument("--skill", type=str, default=None, help="Search keyword, for example 'python'")
     args = parser.parse_args()
+
+    setup_logging()
     main(args.pages, args.skill)

@@ -1,0 +1,39 @@
+[project]
+name = "resume-parsing"
+version = "0.1.0"
+description = "Parser for Ukrainian job platforms (work.ua, robota.ua) with candidate scoring"
+readme = "README.md"
+requires-python = ">=3.12"
+license = {text = "MIT"}
+authors = [
+    {name = "Developer"}
+]
+keywords = ["resume", "parser", "work.ua", "robota.ua"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "flake8>=7.0.0",
+]
+
+[project.scripts]
+parse-work-ua = "work_ua.get_resume:main"
+parse-work-ua-resume = "work_ua.get_separate_resume:main"
+parse-robota-ua = "robota_ua.get_resume:main"
+parse-robota-ua-resume = "robota_ua.get_separate_resume:main"
+sort-resumes = "sorting_resume.sorting_resume:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["core*", "parsers*", "work_ua*", "robota_ua*", "sorting_resume*", "other_tools*"]
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
